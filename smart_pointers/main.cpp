@@ -18,6 +18,9 @@ int main()
 
   std::auto_ptr<int> a_d = std::auto_ptr<int>(new int(2)); //здесь временный объект, ошибки не будет, auto_ptr ничего не знает про rvalue
 
+  std::auto_ptr<int> a_e(new int[2]);       // ub, так как auto_ptr не работает с массивами
+  std::cout << *a_e << "\n";
+
 
      /*unique_ptr test*/
   std::unique_ptr<int> u_a(new int(5));
@@ -25,8 +28,8 @@ int main()
 
  // std::unique_ptr<int> u_b = u_aa; //ошибка, так как unique_ptr запрещает передачу прав пользования памятью
 
-  std::unique_ptr<int> u_c = std::unique_ptr<int>(new int(2));
-  std::cout << *u_c << "\n";
+  std::unique_ptr<int> u_c = std::unique_ptr<int>(new int(2)); //здесь ошибки не будет, так как unique_ptr понимает, что справа
+  std::cout << *u_c << "\n";                                   // временный объект, который никак не может создавать опасность
    
 
 }
