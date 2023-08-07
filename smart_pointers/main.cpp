@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
-
-
+#include <vector>
+#include <algorithm>
 
 int main()
 {
@@ -18,9 +18,8 @@ int main()
 
   std::auto_ptr<int> a_d = std::auto_ptr<int>(new int(2)); //здесь временный объект, ошибки не будет, auto_ptr ничего не знает про rvalue
 
-  std::auto_ptr<int> a_e(new int[2]);       // ub, так как auto_ptr не работает с массивами
-  std::cout << *a_e << "\n";
-
+ // std::auto_ptr<int[]> a_e(new int(3));       // ошибка, так как auto_ptr не работает с массивами
+  
 
      /*unique_ptr test*/
   std::unique_ptr<int> u_a(new int(5));
@@ -31,5 +30,19 @@ int main()
   std::unique_ptr<int> u_c = std::unique_ptr<int>(new int(2)); //здесь ошибки не будет, так как unique_ptr понимает, что справа
   std::cout << *u_c << "\n";                                   // временный объект, который никак не может создавать опасность
    
+  std::unique_ptr<int[]> a_e(new int(3));       // ошибки нет, так как unique_ptr умеет работать с массивами (в деструкторе будет
+                                                // вызыван delete[])
+  std::vector<std::unique_ptr<int>> u_vec(2);
+  //u_vec.push_back(u_a);                         // ошибка компил€ции, так как произойдет присваивание unique_ptr
+  u_vec.push_back(std::unique_ptr<int>(new int(2))); //ошибки нет, объект временный
 
-}
+     /*shared_ptr test*/
+  std::shared_ptr<int> s_a(new int(7));
+  std::shared_ptr<int> s_b(s_a);    // ошибки не будет, так как shared_ptr дл€ этого и создан (идет подсчет ссылок)
+  std::cout << *s_a << "\n";
+  std::cout << *s_b << "\n";
+  
+  std::vector<std::shared_ptr<int>> s_vec(10);
+  s_vec.push_back(s_a);
+}        
+
