@@ -3,6 +3,8 @@
 #include <vector>
 #include <algorithm>
 
+#include "unique.h"
+
 int main()
 {
 	/*auto_ptr test*/
