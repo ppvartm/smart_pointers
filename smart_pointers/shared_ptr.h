@@ -1,5 +1,14 @@
 #pragma once
 
+template<typename U>
+struct control_block
+{
+	size_t counter_;
+	U object;
+
+	template<typename ... Args>
+	control_block(size_t count, Args&& ... args) :counter_(count), object(std::forward<U>(args)...) {};
+};
 
 template<typename T>
 class shared_ptr
@@ -9,21 +18,10 @@ private:
 	T* ptr = nullptr;
 	size_t* counter = nullptr;
 
-	
-	template<typename U>
-	struct control_block
-	{
-		size_t* counter_;
-		U* object;
-
-		template<typename ... Args>
-		control_block(size_t count, Args&& ... args) :counter_(count), object(std::forward<U>(args)...) {};
-	};
-
 	template <typename U, typename ... Args>
 	friend shared_ptr<U> make_shared(Args&& ... args);
 
-	shared_ptr(control_block<T>* cb) :ptr(cb->object), counter(cb->counter_) {};
+	shared_ptr(control_block<T>* cb) :ptr(reinterpret_cast<T*>(& cb->object)), counter(reinterpret_cast<size_t*>(&cb->counter_)) {};
 
 
 public:
@@ -63,7 +61,7 @@ template<typename T, typename ... Args>
 shared_ptr<T> make_shared(Args&& ... args)
 {
 
-	shared_ptr<int> ptr(new int(4));
+	
 	auto ptr_ = new control_block<T>(1, std::forward<T>(args)...);
 	return shared_ptr<T>(ptr_);
 }

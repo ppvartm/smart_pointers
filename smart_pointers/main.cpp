@@ -51,6 +51,5 @@ int main()
   shared_ptr<int> sh_ptr = make_shared<int>(4);
 
 
-
 }        
 
