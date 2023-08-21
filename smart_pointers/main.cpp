@@ -48,8 +48,7 @@ int main()
   s_vec.push_back(s_a);
 
 
-  shared_ptr<int> my_ptr(new int(3));
-  shared_ptr<int> my_new_ptr = my_ptr;
+  shared_ptr<int> sh_ptr = make_shared<int>(4);
 
 
 
