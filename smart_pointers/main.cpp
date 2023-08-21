@@ -2,8 +2,8 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
-
-#include "unique.h"
+#include "unique_ptr.h"
+#include "shared_ptr.h"
 
 int main()
 {
@@ -46,5 +46,12 @@ int main()
   
   std::vector<std::shared_ptr<int>> s_vec(10);
   s_vec.push_back(s_a);
+
+
+  shared_ptr<int> my_ptr(new int(3));
+  shared_ptr<int> my_new_ptr = my_ptr;
+
+
+
 }        
 
